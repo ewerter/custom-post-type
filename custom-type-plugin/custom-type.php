@@ -22,6 +22,7 @@ function my_custom_post_type() {
             'has_archive' => true,
             'rewrite' => array('slug' => 'parks'),
             'supports' => array('title', 'editor', 'author', 'thumbnail', 'custom-fields'),
+            'taxonomies' => array( 'park_taxonomy' ),
             'show_in_rest' => true,
         )
     );
@@ -149,3 +150,22 @@ function park_save_meta_box_data($post_id) {
     }
 }
 add_action('save_post', 'park_save_meta_box_data');
+
+// Registering custom taxonomy
+function park_taxonomy() {
+    register_taxonomy(
+        'facilities',        // Taxonomy name
+        'park_post_type',             // post type name
+        array(
+            'hierarchical' => true,
+            'label' => 'Facilities', // display name
+            'query_var' => true,
+            'rewrite' => array(
+                'slug' => 'facilities',    // This controls the base slug that will display before each term
+                'with_front' => false  // Don't display the category base before
+            ),
+            'show_in_rest' => true, // Enables Gutenberg compatibility
+            )
+    );
+}
+add_action( 'init', 'park_taxonomy');
