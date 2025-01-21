@@ -1,3 +1,3 @@
 function showAlert() {
-    alert("Page loaded!");
+    //alert("Page loaded!");
 }

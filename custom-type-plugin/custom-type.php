@@ -169,3 +169,57 @@ function park_taxonomy() {
     );
 }
 add_action( 'init', 'park_taxonomy');
+
+// Registering shortcut
+function display_park_list($atts) {
+    // Parse attributes (if any are passed)
+    $atts = shortcode_atts(
+        array(
+            'posts_per_page' => -1, // Default to show all posts
+            'orderby' => 'date',    // Order by date
+            'order' => 'DESC',      // Descending order
+        ),
+        $atts,
+        'park_list'
+    );
+
+    // Query for the 'park_post_type' posts
+    $query = new WP_Query(array(
+        'post_type' => 'park_post_type',
+        'posts_per_page' => $atts['posts_per_page'],
+        'orderby' => $atts['orderby'],
+        'order' => $atts['order'],
+    ));
+
+    // Check if posts exist
+    if ($query->have_posts()) {
+        $output = '<div class="park-list">';
+
+        // Loop through posts and build output
+        while ($query->have_posts()) {
+            $query->the_post();
+
+            // Customize the output for each post
+            $output .= '<div class="park-item">';
+            $output .= '<h3>' . get_the_title() . '</h3>';
+            $output .= '<div class="park-content">' . get_the_excerpt() . '</div>';
+            if (has_post_thumbnail()) {
+                $output .= '<div class="park-thumbnail">' . get_the_post_thumbnail(get_the_ID(), 'medium') . '</div>';
+            }
+            $output .= '</div>';
+        }
+
+        $output .= '</div>';
+
+        // Restore original post data
+        wp_reset_postdata();
+    } else {
+        // No posts found
+        $output = '<p>No parks found.</p>';
+    }
+
+    return $output; // Return the output for the shortcode
+}
+
+// Add the shortcode
+add_shortcode('park_list', 'display_park_list');
