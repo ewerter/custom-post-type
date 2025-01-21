@@ -21,8 +21,44 @@ function my_custom_post_type() {
             'public' => true,
             'has_archive' => true,
             'rewrite' => array('slug' => 'parks'),
-            'supports' => array('title', 'editor', 'thumbnail'),
+            'supports' => array('title', 'editor', 'thumbnail', 'custom-fields'),
             'show_in_rest' => true,
         )
     );
 }
+
+// Registering custom fields
+function custom_post_type_fields() {
+     
+     register_post_meta('park_post_type', 'name', [
+        'type' => 'string',
+        'description' => 'The name of the park',
+        'single' => true,
+        'show_in_rest' => true,
+    ]);
+
+   
+    register_post_meta('park_post_type', 'location', [
+        'type' => 'string',
+        'description' => 'Location of the Park',
+        'single' => true,
+        'show_in_rest' => true,
+    ]);
+
+
+     register_post_meta('park_post_type', 'hours', [
+        'type' => 'string',
+        'description' => 'Hours of operation',
+        'single' => true,
+        'show_in_rest' => true,
+    ]);
+
+    
+    register_post_meta('park_post_type', 'short_description', [
+        'type' => 'string',
+        'description' => 'Description of the park',
+        'single' => true,
+        'show_in_rest' => true,
+    ]);
+}
+add_action('init', 'custom_post_type_fields');
