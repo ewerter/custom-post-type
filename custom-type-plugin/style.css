@@ -15,3 +15,9 @@
 .park-item > p{
     font-size: 1rem;
 }
+@media screen and (min-width: 1024px) {
+    /* Your desktop styles here */
+    .park-content{
+        width: 60%;
+    }
+}
