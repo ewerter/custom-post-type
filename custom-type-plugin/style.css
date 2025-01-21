@@ -1,0 +1,17 @@
+.park-list{
+    display: flex;
+    flex-direction: column;
+}
+.park-content > p{
+    font-size: 1rem;
+}
+.park-item{
+    border-bottom: 1px solid #979797;
+    margin-bottom: 20px;
+}
+.park-item > h3{
+    font-weight: 700;
+}
+.park-item > p{
+    font-size: 1rem;
+}

@@ -76,6 +76,16 @@ function enqueue_custom_type_script() {
 }
 add_action('enqueue_block_editor_assets', 'enqueue_custom_type_script');
 
+//enqueueing the style
+add_action('wp_enqueue_scripts', 'enqueue_custom_type_style');
+
+function enqueue_custom_type_style() {
+    wp_enqueue_style(
+        'custom_type_style',
+        plugins_url('style.css', __FILE__)
+    );
+}
+
 function park_custom_meta_boxes() {
     add_meta_box(
         'park_meta_box',          // Unique ID for the meta box
@@ -199,13 +209,27 @@ function display_park_list($atts) {
         while ($query->have_posts()) {
             $query->the_post();
 
+            // Fetch custom fields
+            $park_name = get_post_meta(get_the_ID(), 'name', true);
+            $park_location = get_post_meta(get_the_ID(), 'location', true);
+            $park_hours = get_post_meta(get_the_ID(), 'hours', true);
+
             // Customize the output for each post
             $output .= '<div class="park-item">';
-            $output .= '<h3>' . get_the_title() . '</h3>';
-            $output .= '<div class="park-content">' . get_the_excerpt() . '</div>';
             if (has_post_thumbnail()) {
                 $output .= '<div class="park-thumbnail">' . get_the_post_thumbnail(get_the_ID(), 'medium') . '</div>';
             }
+            $output .= '<h3>' . get_the_title() . '</h3>';
+            if ($park_name) {
+                $output .= '<p>Park: ' . esc_html($park_name) . '</p>';
+            }
+            if ($park_location) {
+                $output .= '<p>Location: ' . esc_html($park_location) . '</p>';
+            }
+            if ($park_hours) {
+                $output .= '<p>Hours: ' . esc_html($park_hours) . '</p>';
+            }
+            $output .= '<div class="park-content"><p>' . wp_trim_words(get_the_excerpt(), 20, '...') . '</p></div>';
             $output .= '</div>';
         }
 
@@ -223,3 +247,5 @@ function display_park_list($atts) {
 
 // Add the shortcode
 add_shortcode('park_list', 'display_park_list');
+
+
