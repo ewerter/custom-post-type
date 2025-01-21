@@ -62,3 +62,15 @@ function custom_post_type_fields() {
     ]);
 }
 add_action('init', 'custom_post_type_fields');
+
+//enqueing the script
+function enqueue_custom_type_script() {
+    wp_enqueue_script(
+        'enqueue_custom_type_script',
+        plugins_url('custom-type-plugin.js', __FILE__), 
+        ['wp-blocks', 'wp-element', 'wp-editor', 'wp-components', 'wp-data'], // Gutenberg dependencies
+        '1.0.0',
+        true
+    );
+}
+add_action('enqueue_block_editor_assets', 'enqueue_custom_type_script');
